@@ -66,11 +66,6 @@ export class Composer<T extends GenericLayout = GenericLayout> {
     icon(value: string, type: "Normal" | "Web" = "Normal") {
         Java.scheduleOnMainThread(() => {
             this.$icon = new Icon(type, value);
-
-            this.$icon.onClickListener = () => {
-                this.$icon.visibility = GONE;
-                this.layout.me.visibility = VISIBLE;
-            }
             this.$icon.visibility = VISIBLE;
 
             this.layout.initializeIcon();
