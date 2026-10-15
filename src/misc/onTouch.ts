@@ -21,10 +21,12 @@ type TouchPosition = {
 export class OnTouch {
     initialPosition: InitialPosition;
     touchPosition: TouchPosition;
+    isDragging: boolean;
 
     constructor(target: View) {
         this.initialPosition = {x: 0, y: 0};
         this.touchPosition = {x: 0, y: 0};
+        this.isDragging = false;
 
         target.onTouchListener = (v, e) => this.callback(v, e);
     }
@@ -37,18 +39,16 @@ export class OnTouch {
 
                 this.touchPosition.x = Math.floor(event.getRawX());
                 this.touchPosition.y = Math.floor(event.getRawY());
+                this.isDragging = false;
                 return true;
             case ACTION_UP:
                 instance.layout.me.alpha = 1.;
                 instance.$icon.alpha = instance.$icon.instance.$className == Api.ImageView.$className ? 255 : 1.;
 
-                const [rawX, rawY] = [Math.floor(event.getRawX() - this.touchPosition.x), Math.floor(event.getRawY() - this.touchPosition.y)];
-                if (instance.$icon.visibility == VISIBLE) {
-                    // Only open the menu if the icon was released within 10 pixels of the original touch position
-                    if (Math.abs(rawX) < 10 && Math.abs(rawY) < 10) {
-                        instance.$icon.visibility = GONE;
-                        instance.layout.me.visibility = VISIBLE;
-                    }
+                // Only open the menu if the icon was released within 10 pixels of the original touch position
+                if (instance.$icon.visibility == VISIBLE && !this.isDragging) {
+                    instance.$icon.visibility = GONE;
+                    instance.layout.me.visibility = VISIBLE;
                 }
                 return true;
             case ACTION_MOVE:
@@ -56,8 +56,14 @@ export class OnTouch {
                 instance.$icon.alpha = instance.$icon.instance.$className == Api.ImageView.$className ?
                     Math.round(config.icon.alpha / 2) : 0.5;
 
-                instance.layout.params.x.value = this.initialPosition.x + Math.floor(event.getRawX() - this.touchPosition.x);
-                instance.layout.params.y.value = this.initialPosition.y + Math.floor(event.getRawY() - this.touchPosition.y);
+                const [rawX, rawY] = [Math.floor(event.getRawX() - this.touchPosition.x), Math.floor(event.getRawY() - this.touchPosition.y)];
+
+                if (Math.abs(rawX) >= 10 || Math.abs(rawY) >= 10) {
+                    this.isDragging = true;
+                }
+
+                instance.layout.params.x.value = this.initialPosition.x + rawX;
+                instance.layout.params.y.value = this.initialPosition.y + rawY;
 
                 Java.scheduleOnMainThread(() => {
                     app.windowManager.updateViewLayout(instance.rootFrame.instance, instance.layout.params);
