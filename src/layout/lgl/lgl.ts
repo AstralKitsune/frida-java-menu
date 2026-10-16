@@ -231,7 +231,7 @@ export class LGLLayout extends GenericLayout {
         return rg;
     }
 
-    seekbar(label: string, max: number, min?: number, callback?: SeekBarCallback): View {
+    seekbar(label: string, max: number, min: number = 0, callback?: SeekBarCallback): View {
         const sb = seekbar(label, max, min, (progress: number) => {
             seekbarLabel.text = format(label, progress);
             callback?.call(sb, progress);

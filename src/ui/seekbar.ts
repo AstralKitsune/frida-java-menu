@@ -72,10 +72,10 @@ export class SeekBar extends View {
 }
 
 /** @internal Initializes new `android.widget.SeekBar` wrapper with default parameters */
-export function seekbar(label: string, max: number, min?: number, callback?: SeekBarCallback): SeekBar {
+export function seekbar(label: string, max: number, min: number = 0, callback?: SeekBarCallback): SeekBar {
     const seekbar = new SeekBar(sharedPreferences.getInt(label));
     seekbar.max = max;
-    min ? seekbar.min = min : seekbar.min = 0;
+    seekbar.min = min;
     if (callback)
         seekbar.onSeekBarChangeListener = callback;
 
