@@ -8,17 +8,17 @@ export const app = {
         return Api.ActivityThread.currentApplication();
     },
 
-    /** Returns package manager instance */
+    /** @returns PackageManager instance to find global package information */
     get packageManager(): Java.Wrapper {
         return this.instance.getPackageManager();
     },
 
-    /** Returns app package name */
+    /** @returns The name of this application's package */
     get packageName(): string {
         return this.instance.getPackageName();
     },
 
-    /** Returns app context */
+    /** @returns The context of the single, global Application object of the current process */
     get context(): Java.Wrapper {
         return this.instance.getApplicationContext();
     },

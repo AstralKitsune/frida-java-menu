@@ -5,9 +5,35 @@ import { app } from "../runtime";
 
 /** App's SharedPreferences storage */
 export class SharedPreferences {
-    /** @internal Instance of `SharedPreferences` */
+    /**
+     * @internal Instance of `SharedPreferences`
+     *
+     * SharedPreferences is an Android interface that provides a way to store and retrieve key-value pairs of primitive data types in a persistent storage.
+     * It is used to save user preferences, settings, and other small amounts of data that need to be retained across app sessions.
+     *
+     * To write to a shared preferences file, we create a `SharedPreferences.Editor` by calling `edit()` on our `SharedPreferences`.
+     * We then put keys and values into the preferences file by using methods like `putString()` and `putInt()`.
+     * Finally, we call `apply()` on the editor, which writes the updates to disk asynchronously.
+     *
+     * Reading values from a shared preferences file is done by calling methods such as `getInt()` and `getString()`,
+     * passing in the key for the value we want, and optionally a default value to return if the key isn't present.
+     *
+     * @see https://developer.android.com/reference/android/content/SharedPreferences
+     * @see https://developer.android.com/training/data-storage/shared-preferences
+     */
     instance: Java.Wrapper;
 
+    /**
+     * Initialize the SharedPreferences instance using the app's context and a unique name for the preferences file.
+     * If a preferences file by this name does not exist, it will be created when we retrieve an editor and commit changes.
+     * Only one instance of the SharedPreferences object is returned to any callers for the same name.
+     *
+     * Definition: `public abstract SharedPreferences getSharedPreferences (String name, int mode)`
+     *
+     * `MODE_PRIVATE` is the default file creation mode, where the created file can only be accessed by our app.
+     *
+     * @see https://developer.android.com/reference/android/content/Context
+     */
     constructor() {
         this.instance = app.context.getSharedPreferences(app.packageName + "_menuprefs", app.context.MODE_PRIVATE.value);
     }

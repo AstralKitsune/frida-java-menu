@@ -112,7 +112,14 @@ export class View {
             }).$new());
         });
     }
-    /** Sets onTouchListener callback */
+    /**
+     * Sets onTouchListener callback
+     *
+     * Called when a touch event is dispatched to a view.
+     * This allows listeners to get a chance to respond before the target view.
+     *
+     * @see https://developer.android.com/reference/android/view/View.OnTouchListener
+     */
     set onTouchListener(callback: (view: Java.Wrapper, event: Java.Wrapper) => void) {
         Java.perform(() => {
             this.instance.setOnTouchListener(Java.registerClass({
